@@ -1398,7 +1398,7 @@ private:
 		}
 		auto prodCount = producerCount.load(std::memory_order_relaxed);
 		auto globalOffset = globalExplicitConsumerOffset.load(std::memory_order_relaxed);
-		if ((details::unlikely)(token.desiredProducer == nullptr)) {
+		if ((details::unlikely)(token.desiredProducer == nullptr)) [[unlikely]] {
 			// Aha, first time we're dequeueing anything.
 			// Figure out our local position
 			// Note: offset is from start, not end, but we're traversing from end -- subtract from count first
@@ -1989,7 +1989,7 @@ private:
 				// this load is sequenced after (happens after) the earlier load above. This is supported by read-read
 				// coherency (as defined in the standard), explained here: http://en.cppreference.com/w/cpp/atomic/memory_order
 				tail = this->tailIndex.load(std::memory_order_acquire);
-				if ((details::likely)(details::circular_less_than<index_t>(myDequeueCount - overcommit, tail))) {
+				if ((details::likely)(details::circular_less_than<index_t>(myDequeueCount - overcommit, tail))) [[likely]] {
 					// Guaranteed to be at least one element to dequeue!
 					
 					// Get the index. Note that since there's guaranteed to be at least one element, this
@@ -2558,7 +2558,7 @@ private:
 				
 				index_t myDequeueCount = this->dequeueOptimisticCount.fetch_add(1, std::memory_order_relaxed);
 				tail = this->tailIndex.load(std::memory_order_acquire);
-				if ((details::likely)(details::circular_less_than<index_t>(myDequeueCount - overcommit, tail))) {
+				if ((details::likely)(details::circular_less_than<index_t>(myDequeueCount - overcommit, tail))) [[likely]] {
 					index_t index = this->headIndex.fetch_add(1, std::memory_order_acq_rel);
 					
 					// Determine which block the element is in

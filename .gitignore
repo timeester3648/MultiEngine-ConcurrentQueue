@@ -31,3 +31,9 @@ tests/CDSChecker/model-checker/
 tests/relacy/freelist.exe
 tests/relacy/spmchash.exe
 tests/relacy/log.txt
+
+# exclude project files
+**.sln
+**.vcxproj
+**.vcxproj.user
+**.vcxproj.filters
